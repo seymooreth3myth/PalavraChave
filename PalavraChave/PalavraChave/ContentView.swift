@@ -33,6 +33,11 @@ struct ContentView: View {
                     }
                 }
             }
+            .toolbar {
+                ToolbarItem() {
+                    Button("Restart", action: startGame)
+                }
+            }
             .navigationTitle(rootWord)
             .onSubmit(addNewWord)
             .onAppear(perform: startGame)
@@ -48,6 +53,11 @@ struct ContentView: View {
     func addNewWord() {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         guard answer.count > 0 else { return }
+        
+        guard isShorterThanthreeLetters(word: answer) else {
+            wordError(title: "Menor que 3 letras", message: "por favor se esforce mais!")
+            return
+        }
         
         guard isOriginal(word: answer) else {
             wordError(title: "Palavra já foi usada", message: "Pense em outra palavra!")
@@ -79,6 +89,15 @@ struct ContentView: View {
             }
         }
         fatalError("Não foi possível carregar o arquivo start.txt do bunble")
+    }
+    
+    func isShorterThanthreeLetters(word: String) -> Bool {
+        
+        if(word.count <= 3) {
+            return false
+        } else {
+            return true
+        }
     }
     
     func isOriginal(word:String) -> Bool {
